@@ -69,6 +69,8 @@ ALTER TABLE demo ADD campo3 VARCHAR(20) NULL
 ALTER TABLE demo DROP COLUMN campo3
 -- Actualizar columna
 ALTER TABLE demo ALTER COLUMN campo1 VARCHAR(10)
+-- Renombrar columna
+EXEC sp_rename 'demo.campo1','NombreCliente','COLUMN'
 ```
 
 > Cuando se actualiza la estructura de la columna, no se aplica el cambio al contenido de esta. Esta actividad debe realizarse posteriormente
@@ -80,4 +82,21 @@ INSERT INTO dbo.demo (campo1, campo2) VALUES ('name1','name2')
 -- 2. SELECT (R)
 SELECT * FROM dbo.demo
 -- 3. UPDATE (U) 
+UPDATE dbo.demo SET campo1 WHERE campo1 = 'value'
+```
+
+## Backup
+- Método para sacar una copía de una base de datos.  
+- Dos tipos:
+  - Backup full
+  - Backup incremental o diferencial
+  - Backup de transactional log
+- Realizar un backup consume recursos, ya que se lee todo el disco, y se recomienda en una hora de minimo uso.
+
+```SQL
+BACKUP DATABASE name
+TO DISK = N'PATH\File.bak' WITH NOFORMAT, NOINIT, 
+NAME = N'name operation',
+SKIP, NOREWIND, NOUNLOAD, STATS = 10
+GO
 ```
