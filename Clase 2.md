@@ -83,9 +83,12 @@ INSERT INTO dbo.demo (campo1, campo2) VALUES ('name1','name2')
 SELECT * FROM dbo.demo
 -- 3. UPDATE (U) 
 UPDATE dbo.demo SET campo1 WHERE campo1 = 'value'
+-- 4. DELETE (D)
+DELETE dbo.demo WHERE campo1 = 'value'
 ```
 
-## Backup
+## Backup y Restore
+### Backup
 - Método para sacar una copía de una base de datos.  
 - Dos tipos:
   - Backup full
@@ -99,4 +102,21 @@ TO DISK = N'PATH\File.bak' WITH NOFORMAT, NOINIT,
 NAME = N'name operation',
 SKIP, NOREWIND, NOUNLOAD, STATS = 10
 GO
+```
+
+### Restore
+```SQL
+USE other_name
+BACKUP LOG name TO DISK = N'PATH\File_log' WITH NOFORMAT, NOINIT, NAME = N'File_log', NOSKIP, NOREWIND, NOUNLOAD, NORECOVERY, STATS = 5
+RESTORE DATABASE name FROM DISK = N'PATH\File.bak' WITH FILE = 2, NOUNLOAD, STATS = 5
+GO
+```
+
+## BCP - Bulk copy program
+> [Ver documentación](https://learn.microsoft.com/es-es/sql/tools/bcp-utility?view=sql-server-ver16)
+
+```shell
+# Previamente crear la tabla
+bcp database.dbo.table in "PATH\file.txt" -c -T # Importar
+bcp database.dbo.table out "PATH\file.txt" -c -T # Exportar
 ```
